@@ -36,14 +36,14 @@ while run:
 
     keys=pygame.key.get_pressed()
 
-    if keys[pygame.K_z]:
+    if keys[pygame.K_z] and y > vel - 103:
         y -= vel
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and y < 690 - height - vel:
         y += vel
 
 
     redrawGameWindow()
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
