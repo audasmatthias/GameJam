@@ -188,7 +188,7 @@ class Game:
         # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
         # HUD functions
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
-        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, 500, 500)
+        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, self.treasure.rect.center[0], self.treasure.rect.center[1])
         pg.display.flip()
 
     def events(self):
