@@ -24,6 +24,41 @@ def draw_player_health(surf, x, y, pct):
     pg.draw.rect(surf, col, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
 
+
+def draw_player_compass(surf, x, y, xT, yT):
+#    pg.draw.line(surf, (255,0,0),(900,700),(925,725))
+
+    pg.draw.circle(surf, (255,255,255), (900,700), 50, 1)
+    pg.draw.circle(surf, (255,255,255), (900,700), 5, 1)
+
+
+    if(xT >= x+20 and yT >= y+20):
+        pg.draw.line(surf, (255,0,0),(900,700),(925,725))
+    elif(xT >= x+20 and yT <= y-20):
+        pg.draw.line(surf, (255,0,0),(900,700),(925,675))
+    elif(xT <= x-20 and yT <= y-20):
+        pg.draw.line(surf, (255,0,0),(900,700),(875,675))
+    elif(xT <= x-20 and yT >= y+20):
+        pg.draw.line(surf, (255,0,0),(900,700),(875,725))
+    else:
+        if((xT <= x+20 and xT >= x) or (xT >= x-20 and xT < x)):
+            if(yT >= y):
+                #fleche vers le bas
+                pg.draw.line(surf, (255,0,0),(900,700),(900,740))
+            else:
+                #fleche vers le haut
+                pg.draw.line(surf, (255,0,0),(900,700),(900,660))
+        elif((yT <= y+20 and yT >= y) or (yT >= y-20 and yT < y)):
+            if(xT <= x):
+                #vers la droite
+                pg.draw.line(surf, (255,0,0),(900,700),(860,700))
+            else:
+                #vers la gauche
+                pg.draw.line(surf, (255,0,0),(900,700),(940,700))
+        else:
+            pg.draw.line(surf, (255,0,0),(875,675),(925,725))
+            pg.draw.line(surf, (255,0,0),(875,725),(925,675))
+
 class Game:
     def __init__(self):
         pg.init()
@@ -121,11 +156,14 @@ class Game:
             hit.vel = vec(0, 0)
             hit.pos -= vec(BULLET_KNOCKBACK, 0).rotate(-hit.rot)
 
+<<<<<<< HEAD
         if not self.mobs:
             for tile_object in self.map.tmxdata.objects:
                 obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
                 if tile_object.name == 'mob':
                     Mob(self, obj_center.x, obj_center.y)
+=======
+>>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146
     # def draw_grid(self):
     #    for x in range(0, WIDTH, TILESIZE):
     #        pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -149,6 +187,7 @@ class Game:
         # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
         # HUD functions
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
+        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, 500, 500)
         pg.display.flip()
 
     def events(self):
@@ -161,6 +200,10 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+<<<<<<< HEAD
+=======
+                if event.key == pg.K_k:
+>>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146
                     print(self.player.pos.x)
                     print(self.player.pos.y)
 
