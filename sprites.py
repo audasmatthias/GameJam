@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from random import uniform
 from settings import *
 from tilemap import collide_hit_rect
@@ -38,6 +39,7 @@ class Player(pg.sprite.Sprite):
         self.rot = 0
         self.last_shot = 0
         self.health = PLAYER_HEALTH
+        self.score = PLAYER_SCORE
 
     def get_keys(self):
         self.rot_speed = 0
@@ -73,6 +75,7 @@ class Player(pg.sprite.Sprite):
         collide_with_walls(self, self.game.walls, 'y')
         self.rect.center = self.hit_rect.center
 
+
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
@@ -105,6 +108,8 @@ class Mob(pg.sprite.Sprite):
         self.rect.center = self.hit_rect.center
         if self.health <= 0:
             self.kill()
+            
+
 
     def draw_health(self):
         if self.health > 60:
@@ -171,3 +176,5 @@ class Item(pg.sprite.Sprite):
         self.image = game.item_img
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self.hit_rect = ITEM_HIT_RECT.copy()
+        self.hit_rect.center = self.rect.center

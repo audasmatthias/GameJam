@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import random
 from os import path
 from settings import *
 from sprites import *
@@ -59,10 +60,19 @@ class Game:
                 self.player = Player(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.name == 'mobb':
+            if tile_object.name == 'mob':
                 Mob(self, obj_center.x, obj_center.y)
             if tile_object.name == 'treasure':
                 Item(self, obj_center)
+
+            #int = random.randint(1,3)
+            #if int == 1:
+            #    if tile_object.name == 'treasure1':
+            #       Item(self, obj_center)
+            #if int == 2:
+            #   if tile_object.name == 'treasure2':
+            #        Item(self, obj_center)
+
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
     def run(self):
@@ -82,24 +92,40 @@ class Game:
         # update portion of the game loop
         self.all_sprites.update()
         self.camera.update(self.player)
+
+        # player hits item
+        hits = pg.sprite.spritecollide(self.player, self.items, False)
+        for hit in hits:
+            hit.kill()
+            self.player.health -= 10
         # mobs hit player
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
-            self.player.health -= MOB_DAMAGE
+            #self.player.health -= MOB_DAMAGE
             hit.vel = vec(0, 0)
             if self.player.health <= 0:
                 self.playing = False
         if hits:
             self.player.pos += vec(MOB_KNOCKBACK, 0).rotate(-hits[0].rot)
+        # mobs hits island
+        hits = pg.sprite.groupcollide(self.mobs, self.walls, False, False)
+        for hit in hits:
+            hit.health -= WALL_DAMAGE
+            hit.vel = vec(0,0)
+            hit.pos -= vec(WALL_KNOCKBACK, 0)
+
         # bullets hit mobs
         hits = pg.sprite.groupcollide(self.mobs, self.bullets, False, True)
         for hit in hits:
-            hit.health -= BULLET_DAMAGE
+            #hit.health -= BULLET_DAMAGE
             hit.vel = vec(0, 0)
+            hit.pos -= vec(BULLET_KNOCKBACK, 0).rotate(-hit.rot)
 
-
-
-
+        if not self.mobs:
+            for tile_object in self.map.tmxdata.objects:
+                obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
+                if tile_object.name == 'mob':
+                    Mob(self, obj_center.x, obj_center.y)
     # def draw_grid(self):
     #    for x in range(0, WIDTH, TILESIZE):
     #        pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -135,6 +161,8 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+                    print(self.player.pos.x)
+                    print(self.player.pos.y)
 
     def show_start_screen(self):
         pass
