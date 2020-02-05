@@ -170,7 +170,7 @@ class Obstacle(pg.sprite.Sprite):
 
 class Item(pg.sprite.Sprite):
     def __init__(self, game, pos):
-        self.groups = game.all_sprites, game.items
+        self.groups = game.all_sprites #,game.items
         pg.sprite.Sprite.__init__(self,self.groups)
         self.game = game
         self.image = game.item_img
@@ -178,4 +178,3 @@ class Item(pg.sprite.Sprite):
         self.rect.center = pos
         self.hit_rect = ITEM_HIT_RECT.copy()
         self.hit_rect.center = self.rect.center
-        

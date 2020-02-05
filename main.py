@@ -88,7 +88,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
-        self.items = pg.sprite.Group()
+        #self.items = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
             obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
             if tile_object.name == 'player':
@@ -98,7 +98,8 @@ class Game:
             if tile_object.name == 'mob':
                 Mob(self, obj_center.x, obj_center.y)
             if tile_object.name == 'treasure':
-                Item(self, obj_center)
+                self.treasure = Item(self, obj_center)
+                #Item(self, obj_center)
 
             #int = random.randint(1,3)
             #if int == 1:
@@ -129,10 +130,13 @@ class Game:
         self.camera.update(self.player)
 
         # player hits item
-        hits = pg.sprite.spritecollide(self.player, self.items, False)
-        for hit in hits:
-            hit.rect.center = vec(500,500)
+        if collide_hit_rect(self.player,self.treasure):
+            self.treasure.rect.center = vec(500,500)
             self.player.health -= 10
+        #hits = pg.sprite.spritecollide(self.player, self.items, False)
+        #for hit in hits:
+        #    hit.rect.center = vec(500,500)
+        #    self.player.health -= 10
         # mobs hit player
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
