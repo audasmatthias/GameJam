@@ -131,7 +131,71 @@ class Game:
 
         # player hits item
         if collide_hit_rect(self.player,self.treasure):
-            self.treasure.rect.center = vec(500,500)
+            numTresor = random.randint(0,20)
+            if numTresor == 0:
+                xTresor = 500
+                yTresor = 500
+            elif numTresor == 1:
+                xTresor = 607
+                yTresor = 2975
+            elif numTresor == 2:
+                xTresor = 114
+                yTresor = 2573
+            elif numTresor == 3:
+                xTresor = 327
+                yTresor = 1997
+            elif numTresor == 4:
+                xTresor = 213
+                yTresor = 1487
+            elif numTresor == 5:
+                xTresor = 259
+                yTresor = 891
+            elif numTresor == 6:
+                xTresor = 1198
+                yTresor = 735
+            elif numTresor == 7:
+                xTresor = 970
+                yTresor = 940
+            elif numTresor == 8:
+                xTresor = 1461
+                yTresor = 1246
+            elif numTresor == 9:
+                xTresor = 1186
+                yTresor = 1648
+            elif numTresor == 10:
+                xTresor = 708
+                yTresor = 1797
+            elif numTresor == 11:
+                xTresor = 1221
+                yTresor = 2476
+            elif numTresor == 12:
+                xTresor = 2001
+                yTresor = 2173
+            elif numTresor == 13:
+                xTresor = 2587
+                yTresor = 1655
+            elif numTresor == 14:
+                xTresor = 3043
+                yTresor = 1263
+            elif numTresor == 15:
+                xTresor = 2345
+                yTresor = 714
+            elif numTresor == 16:
+                xTresor = 2277
+                yTresor = 2408
+            elif numTresor == 17:
+                xTresor = 3046
+                yTresor = 2797
+            elif numTresor == 18:
+                xTresor = 1748
+                yTresor = 1592
+            elif numTresor == 19:
+                xTresor = 2400
+                yTresor = 1344
+            elif numTresor == 20:
+                xTresor = 2495
+                yTresor = 750
+            self.treasure.rect.center = vec(xTresor,yTresor)
             self.player.health -= 10
         #hits = pg.sprite.spritecollide(self.player, self.items, False)
         #for hit in hits:
@@ -188,7 +252,7 @@ class Game:
         # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
         # HUD functions
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
-        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, 500, 500)
+        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, self.treasure.rect.center[0],self.treasure.rect.center[1])
         pg.display.flip()
 
     def events(self):
