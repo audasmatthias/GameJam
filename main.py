@@ -50,14 +50,12 @@ class Game:
         self.walls = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
-        self.obstacles = pg.sprite.Group()
-
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'player':
                 self.player = Player(self, tile_object.x, tile_object.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.name == 'mobb': 
+            if tile_object.name == 'mob':
                 Mob(self, tile_object.x, tile_object.y)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
@@ -92,15 +90,6 @@ class Game:
         for hit in hits:
             hit.health -= BULLET_DAMAGE
             hit.vel = vec(0, 0)
-
-        hits = pg.sprite.spritecollide(self.player,self.walls, False)
-        for hit in hits:
-            self.player.health -= WALL_DAMAGE
-            hit.vel = vec (0, 0) #bug peut etre ici
-        if hits:
-            self.player.pos += vec(WALL_KNOCKBACK, WALL_KNOCKBACK).rotate(-180) #bug peut etre ici
-
-
 
     # def draw_grid(self):
     #    for x in range(0, WIDTH, TILESIZE):
