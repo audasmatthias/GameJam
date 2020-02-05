@@ -162,3 +162,12 @@ class Obstacle(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x
         self.rect.y = y
+
+class Item(pg.sprite.Sprite):
+    def __init__(self, game, pos):
+        self.groups = game.all_sprites, game.items
+        pg.sprite.Sprite.__init__(self,self.groups)
+        self.game = game
+        self.image = game.item_img
+        self.rect = self.image.get_rect()
+        self.rect.center = pos

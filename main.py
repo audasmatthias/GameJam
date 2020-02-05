@@ -43,6 +43,7 @@ class Game:
         self.mob_img = pg.image.load(path.join(img_folder, MOB_IMG)).convert_alpha()
         #self.wall_img = pg.image.load(path.join(img_folder, WALL_IMG)).convert_alpha()
         #self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
+        self.item_img = pg.image.load(path.join(img_folder, ITEM_IMAGE)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -51,14 +52,17 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
-
+        self.items = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
+            obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
             if tile_object.name == 'player':
-                self.player = Player(self, tile_object.x, tile_object.y)
+                self.player = Player(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.name == 'mobb': 
-                Mob(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'mobb':
+                Mob(self, obj_center.x, obj_center.y)
+            if tile_object.name == 'treasure':
+                Item(self, obj_center)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
     def run(self):
@@ -93,12 +97,6 @@ class Game:
             hit.health -= BULLET_DAMAGE
             hit.vel = vec(0, 0)
 
-        hits = pg.sprite.spritecollide(self.player,self.walls, False)
-        for hit in hits:
-            self.player.health -= WALL_DAMAGE
-            hit.vel = vec (0, 0) #bug peut etre ici
-        if hits:
-            self.player.pos += vec(WALL_KNOCKBACK, WALL_KNOCKBACK).rotate(-180) #bug peut etre ici
 
 
 
