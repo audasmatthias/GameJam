@@ -50,10 +50,7 @@ MOB_HIT_RECT = pg.Rect(0, 0, 30, 30)
 MOB_HEALTH = 100
 MOB_DAMAGE = 20
 MOB_KNOCKBACK = 20
-<<<<<<< HEAD
 
 #Items
 ITEM_IMAGE = 'treasure.png'
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
-=======
->>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146

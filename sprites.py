@@ -108,7 +108,7 @@ class Mob(pg.sprite.Sprite):
         self.rect.center = self.hit_rect.center
         if self.health <= 0:
             self.kill()
-            
+
 
 
     def draw_health(self):
@@ -167,7 +167,6 @@ class Obstacle(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x
         self.rect.y = y
-<<<<<<< HEAD
 
 class Item(pg.sprite.Sprite):
     def __init__(self, game, pos):
@@ -179,5 +178,4 @@ class Item(pg.sprite.Sprite):
         self.rect.center = pos
         self.hit_rect = ITEM_HIT_RECT.copy()
         self.hit_rect.center = self.rect.center
-=======
->>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146
+        

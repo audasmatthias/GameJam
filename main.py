@@ -131,7 +131,7 @@ class Game:
         # player hits item
         hits = pg.sprite.spritecollide(self.player, self.items, False)
         for hit in hits:
-            hit.kill()
+            hit.rect.center = vec(500,500)
             self.player.health -= 10
         # mobs hit player
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
@@ -156,14 +156,11 @@ class Game:
             hit.vel = vec(0, 0)
             hit.pos -= vec(BULLET_KNOCKBACK, 0).rotate(-hit.rot)
 
-<<<<<<< HEAD
         if not self.mobs:
             for tile_object in self.map.tmxdata.objects:
                 obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
                 if tile_object.name == 'mob':
                     Mob(self, obj_center.x, obj_center.y)
-=======
->>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146
     # def draw_grid(self):
     #    for x in range(0, WIDTH, TILESIZE):
     #        pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -200,10 +197,6 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
-<<<<<<< HEAD
-=======
-                if event.key == pg.K_k:
->>>>>>> 71d06f6e8b482d3402b7372ece4c98a32e553146
                     print(self.player.pos.x)
                     print(self.player.pos.y)
 
