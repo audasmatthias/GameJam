@@ -318,7 +318,7 @@ class Game:
                 if event.type == pg.QUIT:
                     waiting = False
                     self.quit()
-                if event.type == pg.KEYUP:
+                if event.type == pg.KEYDOWN:
                     waiting = False
 
     def wait_for_click(self):
