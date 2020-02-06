@@ -300,7 +300,7 @@ class Game:
         self.screen.blit(self.menu_img, (0,0))
         pg.display.flip()
         self.wait_for_click()
-        pg.mixer.music.set_volume(0.8)
+        pg.mixer.music.set_volume(0.5)
         pg.mixer.music.play(loops =-1)
     def show_go_screen(self):
         self.screen.blit(self.go_img, (0,0))

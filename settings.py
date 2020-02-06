@@ -66,4 +66,4 @@ ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
 BG_MUSIC = 'TheYoungBuccaneer.mp3'
 EFFECTS_SOUNDS = {'gameover': 'gameover.ogg',
                   'sharkbite': 'requin.ogg',
-                  'treasure': 'tresor.ogg'}
+                  'treasure': 'tresor2.ogg'}
