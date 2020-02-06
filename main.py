@@ -104,6 +104,7 @@ class Game:
         self.menu_img = pg.image.load(path.join(img_folder, MENU_IMG)).convert_alpha()
         self.go_img = pg.image.load(path.join(img_folder, GAMEOVER_IMG)).convert_alpha()
         self.hud_font = path.join(img_folder, 'OLD.ttf')
+        self.credits_img = pg.image.load(path.join(img_folder, CREDIT_IMG)).convert_alpha()
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -280,7 +281,7 @@ class Game:
     def show_start_screen(self):
         self.screen.blit(self.menu_img, (0,0))
         pg.display.flip()
-        self.wait_for_key()
+        self.wait_for_click()
 
     def show_go_screen(self):
         self.screen.blit(self.go_img, (0,0))
@@ -291,6 +292,18 @@ class Game:
         self.wait_for_key()
 
     def wait_for_key(self):
+        pg.event.wait()
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.quit()
+                if event.type == pg.KEYUP:
+                    waiting = False
+
+    def wait_for_click(self):
         pg.event.wait()
         waiting = True
         while waiting:
@@ -310,8 +323,8 @@ class Game:
                 elif(((296 <= posit[0]) and (posit[0] <= 723)) and ((342<=posit[1]) and (posit[1]<=412))):
                     pg.draw.rect(self.screen, (255,0,0), (296, 342, 427, 70), 2)
                     pg.display.flip()
-                    #if event.type == pg.MOUSEBUTTONDOWN:
-                        #afficher les credits
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        self.show_credit_screen()
                 elif(((294 <= posit[0]) and (posit[0] <= 721)) and ((478<=posit[1]) and (posit[1]<=548))):
                     pg.draw.rect(self.screen, (255,0,0), (294, 478, 427, 70), 2)
                     pg.display.flip()
@@ -327,6 +340,11 @@ class Game:
                         print(posit[0])
                         print(posit[1])
 
+    def show_credit_screen(self):
+        self.screen.blit(self.credits_img, (0,0))
+        pg.display.flip()
+        self.wait_for_key()
+        self.show_start_screen()
 # create the game object
 g = Game()
 while True:

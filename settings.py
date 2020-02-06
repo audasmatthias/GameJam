@@ -54,6 +54,7 @@ MOB_KNOCKBACK = 20
 MENU_IMG = 'menu.png'
 SCORE_IMG = 'score.png'
 GAMEOVER_IMG = 'gameover.png'
+CREDIT_IMG = 'credits.png'
 #Items
 ITEM_IMG = 'treasure1.png'
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
