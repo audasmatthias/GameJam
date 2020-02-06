@@ -57,6 +57,7 @@ MENU_IMG = 'nv_menu.png'
 SCORE_IMG = 'score.png'
 GAMEOVER_IMG = 'gameover.png'
 CREDIT_IMG = 'credits.png'
+RULES_IMG = 'regles.png'
 #Items
 ITEM_IMG = 'treasure1.png'
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
