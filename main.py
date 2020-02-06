@@ -294,6 +294,7 @@ class Game:
         pg.event.wait()
         waiting = True
         while waiting:
+            posit = pg.mouse.get_pos()
             self.clock.tick(FPS)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -301,6 +302,31 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+                if(((296 <= posit[0]) and (posit[0] <= 723)) and ((207<=posit[1]) and (posit[1]<=277))):
+                    pg.draw.rect(self.screen, (255,0,0), (296, 207, 427, 70), 2)
+                    pg.display.flip()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        waiting = False
+                elif(((296 <= posit[0]) and (posit[0] <= 723)) and ((342<=posit[1]) and (posit[1]<=412))):
+                    pg.draw.rect(self.screen, (255,0,0), (296, 342, 427, 70), 2)
+                    pg.display.flip()
+                    #if event.type == pg.MOUSEBUTTONDOWN:
+                        #afficher les credits
+                elif(((294 <= posit[0]) and (posit[0] <= 721)) and ((478<=posit[1]) and (posit[1]<=548))):
+                    pg.draw.rect(self.screen, (255,0,0), (294, 478, 427, 70), 2)
+                    pg.display.flip()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        waiting = False
+                        self.quit()
+                else:
+                    pg.draw.rect(self.screen, (0,0,0), (296, 207, 427, 70), 2)
+                    pg.draw.rect(self.screen, (0,0,0), (296, 342, 427, 70), 2)
+                    pg.draw.rect(self.screen, (0,0,0), (294, 478, 427, 70), 2)
+                    pg.display.flip()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        print(posit[0])
+                        print(posit[1])
+
 # create the game object
 g = Game()
 while True:
