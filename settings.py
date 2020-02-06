@@ -53,7 +53,7 @@ MOB_DAMAGE = 20
 MOB_KNOCKBACK = 20
 
 
-MENU_IMG = 'menu.png'
+MENU_IMG = 'nv_menu.png'
 SCORE_IMG = 'score.png'
 GAMEOVER_IMG = 'gameover.png'
 CREDIT_IMG = 'credits.png'
