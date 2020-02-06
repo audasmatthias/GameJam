@@ -107,6 +107,7 @@ class Game:
         self.go_img = pg.image.load(path.join(img_folder, GAMEOVER_IMG)).convert_alpha()
         self.hud_font = path.join(img_folder, 'OLD.ttf')
         self.credits_img = pg.image.load(path.join(img_folder, CREDIT_IMG)).convert_alpha()
+        self.rules_img = pg.image.load(path.join(img_folder, RULES_IMG)).convert_alpha()
         #Sounds
         pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
@@ -339,8 +340,8 @@ class Game:
                 elif(((296 <= posit[0]) and (posit[0] <= 723)) and ((342<=posit[1]) and (posit[1]<=412))):
                     pg.draw.rect(self.screen, (255,0,0), (296, 342, 427, 70), 2)
                     pg.display.flip()
-                    #if event.type == pg.MOUSEBUTTONDOWN:
-                        #règles du jeu
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        self.show_rules_screen()
                 elif(((294 <= posit[0]) and (posit[0] <= 721)) and ((478<=posit[1]) and (posit[1]<=548))):
                     pg.draw.rect(self.screen, (255,0,0), (294, 478, 427, 70), 2)
                     pg.display.flip()
@@ -364,6 +365,11 @@ class Game:
 
     def show_credit_screen(self):
         self.screen.blit(self.credits_img, (0,0))
+        pg.display.flip()
+        self.wait_for_key()
+        self.show_start_screen()
+    def show_rules_screen(self):
+        self.screen.blit(self.rules_img, (0,0))
         pg.display.flip()
         self.wait_for_key()
         self.show_start_screen()
