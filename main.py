@@ -93,7 +93,9 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'img')
+        snd_folder = path.join(game_folder, 'snd')
         map_folder = path.join(game_folder, 'maps')
+        music_folder = path.join(game_folder, 'music')
         self.map = TiledMap(path.join(map_folder, 'level1.tmx'))
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
@@ -105,6 +107,12 @@ class Game:
         self.go_img = pg.image.load(path.join(img_folder, GAMEOVER_IMG)).convert_alpha()
         self.hud_font = path.join(img_folder, 'OLD.ttf')
         self.credits_img = pg.image.load(path.join(img_folder, CREDIT_IMG)).convert_alpha()
+        #Sounds
+        pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
+
+        self.effects_sounds = {}
+        for type in EFFECTS_SOUNDS:
+             self.effects_sounds[type] = pg.mixer.Sound(path.join(snd_folder, EFFECTS_SOUNDS[type]))
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -126,13 +134,15 @@ class Game:
 
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
+        self.paused = False
     def run(self):
         # game loop - set self.playing = False to end the game
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000.0  # fix for Python 2.x
             self.events()
-            self.update()
+            if not self.paused:
+                self.update()
             self.draw()
 
     def quit(self):
@@ -146,10 +156,12 @@ class Game:
 
         #game over ?
         if self.player.health <= 0:
+            pg.mixer.music.stop()
             self.playing = False
-
+            #self.effects_sounds['gameover'].play()
         # player hits item (lol)
         if collide_hit_rect(self.player,self.treasure):
+            self.effects_sounds['treasure'].play()
             numTresor = random.randint(0,20)
             if numTresor == 0:
                 xTresor = 500
@@ -224,6 +236,8 @@ class Game:
             hit.vel = vec(0, 0)
         if hits:
             self.player.pos += vec(MOB_KNOCKBACK, 0).rotate(-hits[0].rot)
+            self.effects_sounds['sharkbite'].set_volume(0.1)
+            self.effects_sounds['sharkbite'].play()
 
         # mobs hits island
         hits = pg.sprite.groupcollide(self.mobs, self.walls, False, False)
@@ -263,6 +277,9 @@ class Game:
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
         draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, self.treasure.rect.center[0],self.treasure.rect.center[1])
         self.draw_text('Score : {}'.format(self.player.score), self.hud_font, 30,  WHITE, WIDTH-10, 10, align="ne")
+
+        if self.paused:
+            self.draw_text("PAUSED", self.hud_font, 105, BLACK, WIDTH/2, HEIGHT/2, align="center")
         pg.display.flip()
 
     def events(self):
@@ -272,7 +289,7 @@ class Game:
                 self.quit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
-                    self.quit()
+                    self.paused = not self.paused
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
                     print(self.player.pos.x)
@@ -282,7 +299,8 @@ class Game:
         self.screen.blit(self.menu_img, (0,0))
         pg.display.flip()
         self.wait_for_click()
-
+        pg.mixer.music.set_volume(0.8)
+        pg.mixer.music.play(loops =-1)
     def show_go_screen(self):
         self.screen.blit(self.go_img, (0,0))
         self.draw_text('{}'.format(self.player.score), self.hud_font, 100, RED, WIDTH/2, HEIGHT/ 2, align="center")

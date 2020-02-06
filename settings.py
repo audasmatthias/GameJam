@@ -43,6 +43,7 @@ KICKBACK = 200
 GUN_SPREAD = 5
 BULLET_DAMAGE = 10
 BULLET_KNOCKBACK = 100
+BULLET_HIT_RECT = pg.Rect(0, 0, 15, 15)
 # Mob settings
 MOB_IMG = 'mobrequin.png'
 MOB_SPEED = 250
@@ -51,6 +52,7 @@ MOB_HEALTH = 100
 MOB_DAMAGE = 20
 MOB_KNOCKBACK = 20
 
+
 MENU_IMG = 'menu.png'
 SCORE_IMG = 'score.png'
 GAMEOVER_IMG = 'gameover.png'
@@ -58,3 +60,9 @@ CREDIT_IMG = 'credits.png'
 #Items
 ITEM_IMG = 'treasure1.png'
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
+
+#Sounds
+BG_MUSIC = 'TheYoungBuccaneer.mp3'
+EFFECTS_SOUNDS = {'gameover': 'gameover.ogg',
+                  'sharkbite': 'requin.ogg',
+                  'treasure': 'tresor.ogg'}
