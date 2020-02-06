@@ -109,8 +109,6 @@ class Mob(pg.sprite.Sprite):
         if self.health <= 0:
             self.kill()
 
-
-
     def draw_health(self):
         if self.health > 60:
             col = GREEN

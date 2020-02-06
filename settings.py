@@ -51,6 +51,9 @@ MOB_HEALTH = 100
 MOB_DAMAGE = 20
 MOB_KNOCKBACK = 20
 
+MENU_IMG = 'menu.png'
+SCORE_IMG = 'score.png'
+GAMEOVER_IMG = 'gameover.png'
 #Items
-ITEM_IMAGE = 'treasure.png'
+ITEM_IMG = 'treasure1.png'
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)

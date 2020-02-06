@@ -24,13 +24,10 @@ def draw_player_health(surf, x, y, pct):
     pg.draw.rect(surf, col, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
 
-
+#compass
 def draw_player_compass(surf, x, y, xT, yT):
-#    pg.draw.line(surf, (255,0,0),(900,700),(925,725))
-
     pg.draw.circle(surf, (255,255,255), (900,700), 50, 1)
     pg.draw.circle(surf, (255,255,255), (900,700), 5, 1)
-
 
     if(xT >= x+20 and yT >= y+20):
         pg.draw.line(surf, (255,0,0),(900,700),(925,725))
@@ -59,6 +56,7 @@ def draw_player_compass(surf, x, y, xT, yT):
             pg.draw.line(surf, (255,0,0),(875,675),(925,725))
             pg.draw.line(surf, (255,0,0),(875,725),(925,675))
 
+
 class Game:
     def __init__(self):
         pg.init()
@@ -66,6 +64,31 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.load_data()
+
+    #to draw text
+    def draw_text(self, text, font_name, size, color, x, y, align="nw"):
+        font = pg.font.Font(font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        if align == "nw":
+            text_rect.topleft = (x, y)
+        if align == "ne":
+            text_rect.topright = (x, y)
+        if align == "sw":
+            text_rect.bottomleft = (x, y)
+        if align == "se":
+            text_rect.bottomright = (x, y)
+        if align == "n":
+            text_rect.midtop = (x, y)
+        if align == "s":
+            text_rect.midbottom = (x, y)
+        if align == "e":
+            text_rect.midright = (x, y)
+        if align == "w":
+            text_rect.midleft = (x, y)
+        if align == "center":
+            text_rect.center = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
     def load_data(self):
         game_folder = path.dirname(__file__)
@@ -77,9 +100,10 @@ class Game:
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
         self.bullet_img = pg.image.load(path.join(img_folder, BULLET_IMG)).convert_alpha()
         self.mob_img = pg.image.load(path.join(img_folder, MOB_IMG)).convert_alpha()
-        #self.wall_img = pg.image.load(path.join(img_folder, WALL_IMG)).convert_alpha()
-        #self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
-        self.item_img = pg.image.load(path.join(img_folder, ITEM_IMAGE)).convert_alpha()
+        self.item_img = pg.image.load(path.join(img_folder, ITEM_IMG)).convert_alpha()
+        self.menu_img = pg.image.load(path.join(img_folder, MENU_IMG)).convert_alpha()
+        self.go_img = pg.image.load(path.join(img_folder, GAMEOVER_IMG)).convert_alpha()
+        self.hud_font = path.join(img_folder, 'OLD.ttf')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -88,7 +112,6 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
-        #self.items = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
             obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
             if tile_object.name == 'player':
@@ -99,15 +122,6 @@ class Game:
                 Mob(self, obj_center.x, obj_center.y)
             if tile_object.name == 'treasure':
                 self.treasure = Item(self, obj_center)
-                #Item(self, obj_center)
-
-            #int = random.randint(1,3)
-            #if int == 1:
-            #    if tile_object.name == 'treasure1':
-            #       Item(self, obj_center)
-            #if int == 2:
-            #   if tile_object.name == 'treasure2':
-            #        Item(self, obj_center)
 
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
@@ -129,7 +143,11 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
-        # player hits item
+        #game over ?
+        if self.player.health <= 0:
+            self.playing = False
+
+        # player hits item (lol)
         if collide_hit_rect(self.player,self.treasure):
             numTresor = random.randint(0,20)
             if numTresor == 0:
@@ -195,21 +213,17 @@ class Game:
             elif numTresor == 20:
                 xTresor = 2495
                 yTresor = 750
+            self.player.score += 1
             self.treasure.rect.center = vec(xTresor,yTresor)
-            self.player.health -= 10
-        #hits = pg.sprite.spritecollide(self.player, self.items, False)
-        #for hit in hits:
-        #    hit.rect.center = vec(500,500)
-        #    self.player.health -= 10
+
         # mobs hit player
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
-            #self.player.health -= MOB_DAMAGE
+            self.player.health -= MOB_DAMAGE
             hit.vel = vec(0, 0)
-            if self.player.health <= 0:
-                self.playing = False
         if hits:
             self.player.pos += vec(MOB_KNOCKBACK, 0).rotate(-hits[0].rot)
+
         # mobs hits island
         hits = pg.sprite.groupcollide(self.mobs, self.walls, False, False)
         for hit in hits:
@@ -224,22 +238,16 @@ class Game:
             hit.vel = vec(0, 0)
             hit.pos -= vec(BULLET_KNOCKBACK, 0).rotate(-hit.rot)
 
+        # all mobs dead
         if not self.mobs:
             for tile_object in self.map.tmxdata.objects:
                 obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
                 if tile_object.name == 'mob':
                     Mob(self, obj_center.x, obj_center.y)
-    # def draw_grid(self):
-    #    for x in range(0, WIDTH, TILESIZE):
-    #        pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-    #    for y in range(0, HEIGHT, TILESIZE):
-    #        pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def draw(self):
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-        # self.screen.fill(BGCOLOR)
         self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
-        # self.draw_grid()
         for sprite in self.all_sprites:
             if isinstance(sprite, Mob):
                 sprite.draw_health()
@@ -249,14 +257,11 @@ class Game:
         if self.draw_debug:
             for wall in self.walls:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(wall.rect), 1)
-        # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
+
         # HUD functions
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
-<<<<<<< HEAD
-        draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, self.treasure.rect.center[0], self.treasure.rect.center[1])
-=======
         draw_player_compass(self.screen, self.player.pos.x, self.player.pos.y, self.treasure.rect.center[0],self.treasure.rect.center[1])
->>>>>>> 884bb1c735ed413eb16cb98d5d74ff3c5bbf2e7e
+        self.draw_text('Score : {}'.format(self.player.score), self.hud_font, 30,  WHITE, WIDTH-10, 10, align="ne")
         pg.display.flip()
 
     def events(self):
@@ -273,15 +278,33 @@ class Game:
                     print(self.player.pos.y)
 
     def show_start_screen(self):
-        pass
+        self.screen.blit(self.menu_img, (0,0))
+        pg.display.flip()
+        self.wait_for_key()
 
     def show_go_screen(self):
-        pass
+        self.screen.blit(self.go_img, (0,0))
+        self.draw_text('{}'.format(self.player.score), self.hud_font, 100, RED, WIDTH/2, HEIGHT/ 2, align="center")
+        #self.draw_text("Press a key to start", self.hud_font, 75, WHITE,
+                       #WIDTH / 2, HEIGHT * 3 / 4, align="center")
+        pg.display.flip()
+        self.wait_for_key()
 
+    def wait_for_key(self):
+        pg.event.wait()
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.quit()
+                if event.type == pg.KEYUP:
+                    waiting = False
 # create the game object
 g = Game()
-g.show_start_screen()
 while True:
     g.new()
+    g.show_start_screen()
     g.run()
     g.show_go_screen()
