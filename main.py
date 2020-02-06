@@ -339,10 +339,15 @@ class Game:
                 elif(((296 <= posit[0]) and (posit[0] <= 723)) and ((342<=posit[1]) and (posit[1]<=412))):
                     pg.draw.rect(self.screen, (255,0,0), (296, 342, 427, 70), 2)
                     pg.display.flip()
-                    if event.type == pg.MOUSEBUTTONDOWN:
-                        self.show_credit_screen()
+                    #if event.type == pg.MOUSEBUTTONDOWN:
+                        #règles du jeu
                 elif(((294 <= posit[0]) and (posit[0] <= 721)) and ((478<=posit[1]) and (posit[1]<=548))):
                     pg.draw.rect(self.screen, (255,0,0), (294, 478, 427, 70), 2)
+                    pg.display.flip()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        self.show_credit_screen()
+                elif(((293 <= posit[0]) and (posit[0] <= 720)) and ((615<=posit[1]) and (posit[1]<=685))):
+                    pg.draw.rect(self.screen, (255,0,0), (293, 615, 427, 70), 2)
                     pg.display.flip()
                     if event.type == pg.MOUSEBUTTONDOWN:
                         waiting = False
@@ -351,6 +356,7 @@ class Game:
                     pg.draw.rect(self.screen, (255,255,255), (296, 207, 427, 70), 2)
                     pg.draw.rect(self.screen, (255,255,255), (296, 342, 427, 70), 2)
                     pg.draw.rect(self.screen, (255,255,255), (294, 478, 427, 70), 2)
+                    pg.draw.rect(self.screen, (255,255,255), (293, 615, 427, 70), 2)
                     pg.display.flip()
                     if event.type == pg.MOUSEBUTTONDOWN:
                         print(posit[0])
